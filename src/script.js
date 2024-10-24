@@ -186,24 +186,33 @@ document.getElementById('priorityFilter').addEventListener('change', renderTasks
 // Initial render
 renderTasks();
 
-// Download tasks as JSON
-function downloadTasksAsJSON() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tasks));
+// Base64 encoding function
+function base64Encode(data) {
+    return btoa(unescape(encodeURIComponent(data)));
+}
+
+// Download tasks as encrypted HABLU file
+function downloadTasksAsHABLU() {
+    const jsonData = JSON.stringify(tasks);
+    const encryptedData = base64Encode(jsonData); // Encrypt the JSON data
+    const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(encryptedData); // Change MIME type to text/plain
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "tasks.json");
+    downloadAnchor.setAttribute("download", "tasks.hablu"); // Change file extension to .hablu
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
 }
 
-// Upload tasks from JSON
-function uploadTasksFromJSON(event) {
+// Upload tasks from encrypted HABLU file
+function uploadTasksFromHABLU(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const uploadedTasks = JSON.parse(e.target.result);
+            const uploadedData = e.target.result;
+            const decryptedData = decodeURIComponent(escape(atob(uploadedData))); // Decrypt the data
+            const uploadedTasks = JSON.parse(decryptedData); // Parse the decrypted JSON
             tasks.length = 0; // Clear the current tasks
             tasks.push(...uploadedTasks); // Add the uploaded tasks
             taskIdCounter = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1; // Update the taskIdCounter
@@ -217,16 +226,16 @@ function uploadTasksFromJSON(event) {
 function triggerFileUpload() {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.json';
-    fileInput.addEventListener('change', uploadTasksFromJSON);
+    fileInput.accept = '.hablu'; // Change accepted file type to .hablu
+    fileInput.addEventListener('change', uploadTasksFromHABLU);
     fileInput.click();
 }
 
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
-    if (e.altKey && e.code === 'KeyX') { // ALT + Space = Download JSON
-        downloadTasksAsJSON();
-    } else if (e.altKey && e.code === 'KeyU') { // ALT + U = Upload JSON
+    if (e.altKey && e.code === 'KeyX') { // ALT + X = Download HABLU
+        downloadTasksAsHABLU();
+    } else if (e.altKey && e.code === 'KeyU') { // ALT + U = Upload HABLU
         triggerFileUpload();
     }
 });
