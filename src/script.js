@@ -97,7 +97,15 @@ function renderTasks() {
             renderTasks();
         });
     });
+
+    // Update the task count in the footer
+    const taskCountElement = document.getElementById('taskCount');
+    taskCountElement.textContent = `Total Tasks: ${filteredTasks.length}`;
 }
+
+// Initial render
+renderTasks();
+
 
 // Show Edit Task Modal
 function showEditModal(task) {

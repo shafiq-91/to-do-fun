@@ -4,31 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="src/main.css" rel="stylesheet">
     <title>To-Do List</title>
-    <style>
-        .fade-enter {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-        }
-
-        .fade-enter-active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .modal-enter {
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 0.3s ease;
-        }
-
-        .modal-enter-active {
-            opacity: 1;
-            transform: scale(1);
-        }
-    </style>
 </head>
 
 <body class="bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200 p-6">
@@ -58,19 +35,24 @@
         </div>
 
         <!-- Task Table -->
-        <table class="min-w-full bg-white shadow-md border-collapse border-spacing-0">
+        <table class="w-full">
             <thead>
-                <tr class="text-indigo-700 text-left border-b-2 border-indigo-200">
-                    <th class="p-4 text-sm font-semibold">ID</th>
-                    <th class="p-4 text-sm font-semibold">Task</th>
-                    <th class="p-4 text-sm font-semibold">Date</th>
-                    <th class="p-4 text-sm font-semibold">Status</th>
-                    <th class="p-4 text-sm font-semibold">Priority</th>
-                    <th class="p-4 text-sm font-semibold">Action</th>
+                <tr>
+                    <th class="p-4">ID</th>
+                    <th class="p-4">Title</th>
+                    <th class="p-4">Date</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4">Priority</th>
+                    <th class="p-4">Actions</th>
                 </tr>
             </thead>
             <tbody id="taskList"></tbody>
         </table>
+    </div>
+    <div class="flex items-center justify-center">
+        <footer class="mt-4 font-bold rounded-lg w-2/4 p-4 bg-gray-100 text-center">
+            <span id="taskCount">Total Tasks: 0</span>
+        </footer>
     </div>
 
     <!-- Add Task Modal -->
