@@ -63,7 +63,7 @@ function renderTasks() {
 
     filteredTasks.forEach(task => {
         const row = document.createElement('tr');
-        row.classList.add('border-b-2', 'border-indigo-100');
+        row.classList.add('border-b-1', 'border-red-100');
 
         row.innerHTML = `
             <td class="p-4">${task.id}</td>
@@ -185,3 +185,48 @@ document.getElementById('priorityFilter').addEventListener('change', renderTasks
 
 // Initial render
 renderTasks();
+
+// Download tasks as JSON
+function downloadTasksAsJSON() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tasks));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "tasks.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+// Upload tasks from JSON
+function uploadTasksFromJSON(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const uploadedTasks = JSON.parse(e.target.result);
+            tasks.length = 0; // Clear the current tasks
+            tasks.push(...uploadedTasks); // Add the uploaded tasks
+            taskIdCounter = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1; // Update the taskIdCounter
+            renderTasks(); // Re-render the tasks
+        };
+        reader.readAsText(file);
+    }
+}
+
+// Trigger file upload
+function triggerFileUpload() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    fileInput.addEventListener('change', uploadTasksFromJSON);
+    fileInput.click();
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.altKey && e.code === 'KeyX') { // ALT + Space = Download JSON
+        downloadTasksAsJSON();
+    } else if (e.altKey && e.code === 'KeyU') { // ALT + U = Upload JSON
+        triggerFileUpload();
+    }
+});

@@ -24,3 +24,13 @@
     opacity: 1;
     transform: scale(1);
 }
+
+/* Table responsive */
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    min-width: 600px;
+}
