@@ -47,12 +47,21 @@ function closeTaskModal() {
     }, 300);
 }
 
-// Render tasks
+// Render tasks in the table
 function renderTasks() {
     const taskList = document.getElementById('taskList');
-    taskList.innerHTML = '';
+    const statusFilter = document.getElementById('statusFilter').value;
+    const priorityFilter = document.getElementById('priorityFilter').value;
 
-    tasks.forEach(task => {
+    taskList.innerHTML = ''; // Clear existing tasks
+
+    const filteredTasks = tasks.filter(task => {
+        const statusMatch = statusFilter === 'All' || task.status === statusFilter;
+        const priorityMatch = priorityFilter === 'All' || task.priority === priorityFilter;
+        return statusMatch && priorityMatch;
+    });
+
+    filteredTasks.forEach(task => {
         const row = document.createElement('tr');
         row.classList.add('border-b-2', 'border-indigo-100');
 
@@ -84,7 +93,7 @@ function renderTasks() {
 
         // Complete task action
         row.querySelector('.complete-task-btn').addEventListener('click', () => {
-            task.status = task.status === 'Pending' ? 'Complete' : 'Pending';
+            task.status = task.status === 'Pending' ? 'Completed' : 'Pending';
             renderTasks();
         });
     });
@@ -161,3 +170,10 @@ function closeDeleteModal() {
         deleteModal.classList.add('hidden');
     }, 300);
 }
+
+// Filter event listeners
+document.getElementById('statusFilter').addEventListener('change', renderTasks);
+document.getElementById('priorityFilter').addEventListener('change', renderTasks);
+
+// Initial render
+renderTasks();
