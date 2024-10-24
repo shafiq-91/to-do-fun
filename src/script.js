@@ -239,3 +239,13 @@ document.addEventListener('keydown', (e) => {
         triggerFileUpload();
     }
 });
+
+// Show modal on page load
+window.onload = function() {
+    document.getElementById('modal').classList.remove('hidden');
+};
+
+// Close modal when button is clicked
+document.getElementById('closeModal').onclick = function() {
+    document.getElementById('modal').classList.add('hidden');
+};
