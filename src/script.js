@@ -240,12 +240,5 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Show modal on page load
-window.onload = function() {
-    document.getElementById('modal').classList.remove('hidden');
-};
-
-// Close modal when button is clicked
-document.getElementById('closeModal').onclick = function() {
-    document.getElementById('modal').classList.add('hidden');
-};
+alert('ALT + X for download added task');
+alert('ALT + U for upload task file');
